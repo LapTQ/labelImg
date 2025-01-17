@@ -78,40 +78,66 @@ def format_shortcut(text):
     mod, key = text.split('+', 1)
     return '<b>%s</b>+<b>%s</b>' % (mod, key)
 
+# laptq--add ==========================
+import yaml
+import logging
+from pathlib import Path
 
-LIST__COLORS__RGB = [
-    (0, 243, 68),
-    (125, 36, 255),
-    (221, 0, 186),
-    (255, 68, 79),
-    (255, 111, 221),
-    # (17, 31, 104),
-    (4, 42, 255),
-    (255, 27, 108),
-    (204, 237, 0),
-    (11, 219, 235),
-    (189, 0, 255),
-    (0, 180, 255),
-    # (243, 243, 243),
-    (252, 109, 47),
-    (0, 223, 183),
-    (0, 255, 255),
-    # (123, 0, 104),
-    # (1, 255, 179),
-    (162, 255, 11),
-    (38, 192, 0),
+HERE = Path(__file__).parent
+PATH__DIR__ROOT = HERE.parent
+
+PATH__FILE__LIST__COLORS__RGB = str(PATH__DIR__ROOT / 'list__color__rgb.yaml')
+DEFAULT__LIST__COLOR__RGB = [
+    [0, 243, 68],
+    [125, 36, 255],
+    [221, 0, 186],
+    [255, 68, 79],
+    [255, 111, 221],
+    # [17, 31, 104],
+    [4, 42, 255],
+    [255, 27, 108],
+    [204, 237, 0],
+    # [11, 219, 235],
+    [189, 0, 255],
+    [0, 180, 255],
+    # [243, 243, 243],
+    [252, 109, 47],
+    [0, 223, 183],
+    [0, 255, 255],
+    # [123, 0, 104],
+    # [1, 255, 179],
+    [162, 255, 11],
+    [38, 192, 0],
 ]
+# ========================================
 
 
 def generate_color_by_text(text):
-    s = ustr(text)
-    hash_code = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16)
+    try:
+        hash_code = int(text)
+    except:
+        s = ustr(text)
+        hash_code = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16)
     # laptq--alter ==========================
+    # s = ustr(text)
+    # hash_code = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16)
     # r = int((hash_code / 255) % 255)
     # g = int((hash_code / 65025) % 255)
     # b = int((hash_code / 16581375) % 255)
     # return QColor(r, g, b, 100)
-    r, g, b = LIST__COLORS__RGB[hash_code % len(LIST__COLORS__RGB)]
+    try:
+        hash_code = int(text)
+    except:
+        s = ustr(text)
+        hash_code = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16)
+    with open(PATH__FILE__LIST__COLORS__RGB, 'r') as f:
+        list__color__rgb = []
+        try:
+            list__color__rgb = yaml.safe_load(f)
+        except Exception as e:
+            logging.warning("Error loading: %s" % PATH__FILE__LIST__COLORS__RGB)
+            list__color__rgb = DEFAULT__LIST__COLOR__RGB
+    r, g, b = list__color__rgb[hash_code % len(list__color__rgb)]
     return QColor(r, g, b, 100)
     # ========================================
 

@@ -79,13 +79,41 @@ def format_shortcut(text):
     return '<b>%s</b>+<b>%s</b>' % (mod, key)
 
 
+LIST__COLORS__RGB = [
+    (0, 243, 68),
+    (125, 36, 255),
+    (221, 0, 186),
+    (255, 68, 79),
+    (255, 111, 221),
+    # (17, 31, 104),
+    (4, 42, 255),
+    (255, 27, 108),
+    (204, 237, 0),
+    (11, 219, 235),
+    (189, 0, 255),
+    (0, 180, 255),
+    # (243, 243, 243),
+    (252, 109, 47),
+    (0, 223, 183),
+    (0, 255, 255),
+    # (123, 0, 104),
+    # (1, 255, 179),
+    (162, 255, 11),
+    (38, 192, 0),
+]
+
+
 def generate_color_by_text(text):
     s = ustr(text)
     hash_code = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16)
-    r = int((hash_code / 255) % 255)
-    g = int((hash_code / 65025) % 255)
-    b = int((hash_code / 16581375) % 255)
+    # laptq--alter ==========================
+    # r = int((hash_code / 255) % 255)
+    # g = int((hash_code / 65025) % 255)
+    # b = int((hash_code / 16581375) % 255)
+    # return QColor(r, g, b, 100)
+    r, g, b = LIST__COLORS__RGB[hash_code % len(LIST__COLORS__RGB)]
     return QColor(r, g, b, 100)
+    # ========================================
 
 
 def have_qstring():

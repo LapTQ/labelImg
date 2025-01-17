@@ -46,6 +46,7 @@ class YOLOWriter:
             class_list.append(box_name)
 
         class_index = class_list.index(box_name)
+        class_index = box_name
 
         return class_index, x_center, y_center, w, h
 
@@ -69,7 +70,7 @@ class YOLOWriter:
         for box in self.box_list:
             class_index, x_center, y_center, w, h = self.bnd_box_to_yolo_line(box, class_list)
             # print (classIndex, x_center, y_center, w, h)
-            out_file.write("%d %.6f %.6f %.6f %.6f\n" % (class_index, x_center, y_center, w, h))
+            out_file.write("%s %.6f %.6f %.6f %.6f\n" % (class_index, x_center, y_center, w, h))
 
         # print (classList)
         # print (out_class_file)
@@ -97,8 +98,8 @@ class YoloReader:
 
         # print (file_path, self.class_list_path)
 
-        classes_file = open(self.class_list_path, 'r')
-        self.classes = classes_file.read().strip('\n').split('\n')
+        #classes_file = open(self.class_list_path, 'r')
+        #self.classes = classes_file.read().strip('\n').split('\n')
 
         # print (self.classes)
 
@@ -122,7 +123,8 @@ class YoloReader:
         self.shapes.append((label, points, None, None, difficult))
 
     def yolo_line_to_shape(self, class_index, x_center, y_center, w, h):
-        label = self.classes[int(class_index)]
+        #label = self.classes[int(class_index)]
+        label = class_index
 
         x_min = max(float(x_center) - float(w) / 2, 0)
         x_max = min(float(x_center) + float(w) / 2, 1)

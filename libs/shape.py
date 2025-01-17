@@ -12,12 +12,25 @@ except ImportError:
 from libs.utils import distance
 import sys
 
+# laptq--add ==========================
+import yaml
+import os
+import logging
+from pathlib import Path
+# ========================================
+
 DEFAULT_LINE_COLOR = QColor(0, 255, 0, 128)
 DEFAULT_FILL_COLOR = QColor(255, 0, 0, 128)
 DEFAULT_SELECT_LINE_COLOR = QColor(255, 255, 255)
 DEFAULT_SELECT_FILL_COLOR = QColor(0, 128, 255, 155)
 DEFAULT_VERTEX_FILL_COLOR = QColor(0, 255, 0, 255)
 DEFAULT_HVERTEX_FILL_COLOR = QColor(255, 0, 0)
+
+# laptq--add ==========================
+HERE = Path(__file__).resolve().parent
+PATH__DIR__LABELIMG = HERE.parent
+PATH__FILE__MAP__LABEL__TO__DISPLAYED_TEXT = str(PATH__DIR__LABELIMG / "map__label__to__displayed__text.yaml")
+# ========================================
 
 
 class Shape(object):
@@ -87,7 +100,67 @@ class Shape(object):
     def paint(self, painter):
         if self.points:
             color = self.select_line_color if self.selected else self.line_color
-            pen = QPen(color)
+            
+            # laptq--add ==========================
+            map__label__to__displayed_text = {}
+            if os.path.exists(PATH__FILE__MAP__LABEL__TO__DISPLAYED_TEXT):
+                with open(PATH__FILE__MAP__LABEL__TO__DISPLAYED_TEXT, "r") as file:
+                    try:
+                        map__label__to__displayed_text = yaml.load(file, Loader=yaml.FullLoader)
+                        for k, v in map__label__to__displayed_text.items():
+                            assert v is not None
+                        map__label__to__displayed_text = {str(k): str(v) for k, v in map__label__to__displayed_text.items()}
+                    except Exception as e:
+                        logging.warning("YAML file is empty or invalid: %s" % PATH__FILE__MAP__LABEL__TO__DISPLAYED_TEXT)
+
+            color__no_transparent = QColor(
+                color.red(),
+                color.green(),
+                color.blue(),
+                255
+            )
+
+            line_path__shadow__level_2 = QPainterPath()
+            line_path__shadow__level_2.moveTo(self.points[0] + QPoint(1, 1))
+            color__shadow__level_2 = QColor(
+                0,
+                0,
+                0,
+                64  # color.alpha() // 4
+            )
+            pen__shadow__level_2 = QPen(color__shadow__level_2)
+            pen__shadow__level_2.setWidth(max(1, int(round(2.0 / self.scale))))
+            painter.setPen(pen__shadow__level_2)
+
+            for i, p in enumerate(self.points):
+                line_path__shadow__level_2.lineTo(p + QPoint(1, 1))
+            if self.is_closed():
+                line_path__shadow__level_2.lineTo(self.points[0] + QPoint(1, 1))
+            painter.drawPath(line_path__shadow__level_2)
+
+            line_path__shadow__level_1 = QPainterPath()
+            line_path__shadow__level_1.moveTo(self.points[0] + QPoint(1, 1))
+            color__shadow__level_1 = QColor(
+                color.red() // 1.5,
+                color.green() // 1.5,
+                color.blue() // 1.5,
+                127, # color.alpha() // 2
+            )
+            pen__shadow__level_1 = QPen(color__shadow__level_1)
+            pen__shadow__level_1.setWidth(max(1, int(round(2.0 / self.scale))))
+            painter.setPen(pen__shadow__level_1)
+
+            for i, p in enumerate(self.points):
+                line_path__shadow__level_1.lineTo(p + QPoint(1, 1))
+            if self.is_closed():
+                line_path__shadow__level_1.lineTo(self.points[0] + QPoint(1, 1))
+            painter.drawPath(line_path__shadow__level_1)
+            # ========================================
+            
+            # laptq--alter ==========================
+            # pen = QPen(color)
+            pen = QPen(color__no_transparent)
+            # ========================================
             # Try using integer sizes for smoother drawing(?)
             pen.setWidth(max(1, int(round(2.0 / self.scale))))
             painter.setPen(pen)
@@ -120,18 +193,45 @@ class Shape(object):
                     min_x = min(min_x, point.x())
                     min_y = min(min_y, point.y())
                 if min_x != sys.maxsize and min_y != sys.maxsize:
-                    font = QFont()
-                    font.setPointSize(self.label_font_size)
-                    font.setBold(True)
-                    painter.setFont(font)
                     if self.label is None:
                         self.label = ""
                     if min_y < min_y_label:
                         min_y += min_y_label
-                    painter.drawText(min_x, min_y, self.label)
+
+                    # laptq--add ==========================
+                    font = QFont()
+                    font.setPointSize(self.label_font_size)
+                    font.setBold(False)
+                    painter.setFont(font)
+                    
+                    # painter.setPen(QPen(color__shadow__level_2))
+                    # painter.drawText(min_x + 2, min_y - 2, MAP__LABEL__TO__DISPLAYED_TEXT.get(self.label, self.label))
+                    # painter.setPen(QPen(color__shadow__level_1))
+                    # painter.drawText(min_x + 1, min_y - 3, MAP__LABEL__TO__DISPLAYED_TEXT.get(self.label, self.label))
+                    painter.setPen(QPen(color__shadow__level_2))
+                    painter.drawText(min_x + 1, min_y - 3, map__label__to__displayed_text.get(self.label, self.label))
+                    # ========================================
+
+                    font = QFont()
+                    font.setPointSize(self.label_font_size)
+                    # laptq--alter ==========================
+                    # font.setBold(True)
+                    font.setBold(False)
+                    # ========================================
+                    painter.setFont(font)
+                    # laptq--alter ==========================
+                    # painter.drawText(min_x, min_y, self.label)
+                    # painter.setPen(QPen(color))
+                    painter.setPen(QPen(color__no_transparent))
+                    painter.drawText(min_x, min_y - 4, map__label__to__displayed_text.get(self.label, self.label))
+                    # ========================================
+
 
             if self.fill:
                 color = self.select_fill_color if self.selected else self.fill_color
+                # laptq--add ==========================
+                # color.setAlpha(100)
+                # ========================================
                 painter.fillPath(line_path, color)
 
     def draw_vertex(self, path, i):

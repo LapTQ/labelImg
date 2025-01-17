@@ -126,6 +126,10 @@ class MainWindow(QMainWindow, WindowMixin):
         # Create a widget for using default label
         self.use_default_label_checkbox = QCheckBox(get_str('useDefaultLabel'))
         self.use_default_label_checkbox.setChecked(False)
+        # laptq--add ====================
+        self.to_use___key_pressed__label = False
+        self.key_pressed__label = None
+        # ===============================
         self.default_label_text_line = QLineEdit()
         use_default_label_qhbox_layout = QHBoxLayout()
         use_default_label_qhbox_layout.addWidget(self.use_default_label_checkbox)
@@ -267,11 +271,55 @@ class MainWindow(QMainWindow, WindowMixin):
 
         create_mode = action(get_str('crtBox'), self.set_create_mode,
                              'w', 'new', get_str('crtBoxDetail'), enabled=False)
+        # laptq--add ====================
+        create_mode_0 = action(get_str('crtBox'), self.set_create_mode,
+                       '0', 'new', get_str('crtBoxDetail'), enabled=False)
+        create_mode_1 = action(get_str('crtBox'), self.set_create_mode,
+                       '1', 'new', get_str('crtBoxDetail'), enabled=False)
+        create_mode_2 = action(get_str('crtBox'), self.set_create_mode,
+                       '2', 'new', get_str('crtBoxDetail'), enabled=False)
+        create_mode_3 = action(get_str('crtBox'), self.set_create_mode,
+                       '3', 'new', get_str('crtBoxDetail'), enabled=False)
+        create_mode_4 = action(get_str('crtBox'), self.set_create_mode,
+                       '4', 'new', get_str('crtBoxDetail'), enabled=False)
+        create_mode_5 = action(get_str('crtBox'), self.set_create_mode,
+                       '5', 'new', get_str('crtBoxDetail'), enabled=False)
+        create_mode_6 = action(get_str('crtBox'), self.set_create_mode,
+                       '6', 'new', get_str('crtBoxDetail'), enabled=False)
+        create_mode_7 = action(get_str('crtBox'), self.set_create_mode,
+                       '7', 'new', get_str('crtBoxDetail'), enabled=False)
+        create_mode_8 = action(get_str('crtBox'), self.set_create_mode,
+                       '8', 'new', get_str('crtBoxDetail'), enabled=False)
+        create_mode_9 = action(get_str('crtBox'), self.set_create_mode,
+                       '9', 'new', get_str('crtBoxDetail'), enabled=False)
+        # ===============================
         edit_mode = action(get_str('editBox'), self.set_edit_mode,
                            'Ctrl+J', 'edit', get_str('editBoxDetail'), enabled=False)
 
         create = action(get_str('crtBox'), self.create_shape,
                         'w', 'new', get_str('crtBoxDetail'), enabled=False)
+        # laptq--add ====================
+        create__0 = action(get_str('crtBox'), self.create_shape_0,
+                '0', 'new', get_str('crtBoxDetail'), enabled=False)
+        create__1 = action(get_str('crtBox'), self.create_shape_1,
+                '1', 'new', get_str('crtBoxDetail'), enabled=False)
+        create__2 = action(get_str('crtBox'), self.create_shape_2,
+                '2', 'new', get_str('crtBoxDetail'), enabled=False)
+        create__3 = action(get_str('crtBox'), self.create_shape_3,
+                '3', 'new', get_str('crtBoxDetail'), enabled=False)
+        create__4 = action(get_str('crtBox'), self.create_shape_4,
+                '4', 'new', get_str('crtBoxDetail'), enabled=False)
+        create__5 = action(get_str('crtBox'), self.create_shape_5,
+                '5', 'new', get_str('crtBoxDetail'), enabled=False)
+        create__6 = action(get_str('crtBox'), self.create_shape_6,
+                '6', 'new', get_str('crtBoxDetail'), enabled=False)
+        create__7 = action(get_str('crtBox'), self.create_shape_7,
+                '7', 'new', get_str('crtBoxDetail'), enabled=False)
+        create__8 = action(get_str('crtBox'), self.create_shape_8,
+                '8', 'new', get_str('crtBoxDetail'), enabled=False)
+        create__9 = action(get_str('crtBox'), self.create_shape_9,
+                '9', 'new', get_str('crtBoxDetail'), enabled=False)
+        # ===============================
         delete = action(get_str('delBox'), self.delete_selected_shape,
                         'Delete', 'delete', get_str('delBoxDetail'), enabled=False)
         copy = action(get_str('dupBox'), self.copy_selected_shape,
@@ -357,7 +405,31 @@ class MainWindow(QMainWindow, WindowMixin):
         # Store actions for further handling.
         self.actions = Struct(save=save, save_format=save_format, saveAs=save_as, open=open, close=close, resetAll=reset_all, deleteImg=delete_image,
                               lineColor=color1, create=create, delete=delete, edit=edit, copy=copy,
+                              # laptq--add ====================
+                              create__0=create__0, 
+                              create__1=create__1, 
+                              create__2=create__2, 
+                              create__3=create__3, 
+                              create__4=create__4, 
+                              create__5=create__5, 
+                              create__6=create__6, 
+                              create__7=create__7, 
+                              create__8=create__8, 
+                              create__9=create__9,
+                              # ===============================
                               createMode=create_mode, editMode=edit_mode, advancedMode=advanced_mode,
+                              # laptq--add ====================
+                                createMode_0=create_mode_0,
+                                createMode_1=create_mode_1,
+                                createMode_2=create_mode_2,
+                                createMode_3=create_mode_3,
+                                createMode_4=create_mode_4,
+                                createMode_5=create_mode_5,
+                                createMode_6=create_mode_6,
+                                createMode_7=create_mode_7,
+                                createMode_8=create_mode_8,
+                                createMode_9=create_mode_9,
+                              # ===============================
                               shapeLineColor=shape_line_color, shapeFillColor=shape_fill_color,
                               zoom=zoom, zoomIn=zoom_in, zoomOut=zoom_out, zoomOrg=zoom_org,
                               fitWindow=fit_window, fitWidth=fit_width,
@@ -369,9 +441,27 @@ class MainWindow(QMainWindow, WindowMixin):
                                         None, color1, self.draw_squares_option),
                               beginnerContext=(create, edit, copy, delete),
                               advancedContext=(create_mode, edit_mode, edit, copy,
+                                                  # laptq--add ====================
+                                                    create_mode_0, create_mode_1, create_mode_2, create_mode_3, create_mode_4, create_mode_5, create_mode_6, create_mode_7, create_mode_8, create_mode_9,
+                                                    # ===============================
                                                delete, shape_line_color, shape_fill_color),
                               onLoadActive=(
-                                  close, create, create_mode, edit_mode),
+                                  close, create, create_mode, edit_mode,
+                                  # laptq--add ====================
+                                    create__0,
+                                    create__1,
+                                    create__2,
+                                    create__3,
+                                    create__4,
+                                    create__5,
+                                    create__6,
+                                    create__7,
+                                    create__8,
+                                    create__9,
+
+                                    create_mode_0, create_mode_1, create_mode_2, create_mode_3, create_mode_4, create_mode_5, create_mode_6, create_mode_7, create_mode_8, create_mode_9,
+                                    # ===============================
+                                  ),
                               onShapesPresent=(save_as, hide_all, show_all))
 
         self.menus = Struct(
@@ -422,11 +512,26 @@ class MainWindow(QMainWindow, WindowMixin):
         self.tools = self.toolbar('Tools')
         self.actions.beginner = (
             open, open_dir, change_save_dir, open_next_image, open_prev_image, verify, save, save_format, None, create, copy, delete, None,
+            # laptq--add ====================
+            create__0,
+            create__1,
+            create__2,
+            create__3,
+            create__4,
+            create__5,
+            create__6,
+            create__7,
+            create__8,
+            create__9,
+            # ===============================
             zoom_in, zoom, zoom_out, fit_window, fit_width)
 
         self.actions.advanced = (
             open, open_dir, change_save_dir, open_next_image, open_prev_image, save, save_format, None,
             create_mode, edit_mode, None,
+            # laptq--add ====================
+            create_mode_0, create_mode_1, create_mode_2, create_mode_3, create_mode_4, create_mode_5, create_mode_6, create_mode_7, create_mode_8, create_mode_9,
+            # ===============================
             hide_all, show_all)
 
         self.statusBar().showMessage('%s started.' % __appname__)
@@ -559,6 +664,18 @@ class MainWindow(QMainWindow, WindowMixin):
         self.edit_button.setVisible(not value)
         if value:
             self.actions.createMode.setEnabled(True)
+            # laptq--add ====================
+            self.actions.createMode_0.setEnabled(True)
+            self.actions.createMode_1.setEnabled(True)
+            self.actions.createMode_2.setEnabled(True)
+            self.actions.createMode_3.setEnabled(True)
+            self.actions.createMode_4.setEnabled(True)
+            self.actions.createMode_5.setEnabled(True)
+            self.actions.createMode_6.setEnabled(True)
+            self.actions.createMode_7.setEnabled(True)
+            self.actions.createMode_8.setEnabled(True)
+            self.actions.createMode_9.setEnabled(True)
+            # ===============================
             self.actions.editMode.setEnabled(False)
             self.dock.setFeatures(self.dock.features() | self.dock_features)
         else:
@@ -673,6 +790,81 @@ class MainWindow(QMainWindow, WindowMixin):
         assert self.beginner()
         self.canvas.set_editing(False)
         self.actions.create.setEnabled(False)
+        # laptq--add ====================
+        self.to_use___key_pressed__label = False
+        # ===============================
+
+    # laptq--add ====================
+    def create_shape_0(self):
+        assert self.beginner()
+        self.canvas.set_editing(False)
+        self.actions.create.setEnabled(False)
+        self.to_use___key_pressed__label = True
+        self.key_pressed__label = '0'
+
+    def create_shape_1(self):
+        assert self.beginner()
+        self.canvas.set_editing(False)
+        self.actions.create.setEnabled(False)
+        self.to_use___key_pressed__label = True
+        self.key_pressed__label = '1'
+
+    def create_shape_2(self):
+        assert self.beginner()
+        self.canvas.set_editing(False)
+        self.actions.create.setEnabled(False)
+        self.to_use___key_pressed__label = True
+        self.key_pressed__label = '2'
+
+    def create_shape_3(self):
+        assert self.beginner()
+        self.canvas.set_editing(False)
+        self.actions.create.setEnabled(False)
+        self.to_use___key_pressed__label = True
+        self.key_pressed__label = '3'
+
+    def create_shape_4(self):
+        assert self.beginner()
+        self.canvas.set_editing(False)
+        self.actions.create.setEnabled(False)
+        self.to_use___key_pressed__label = True
+        self.key_pressed__label = '4'
+
+    def create_shape_5(self):
+        assert self.beginner()
+        self.canvas.set_editing(False)
+        self.actions.create.setEnabled(False)
+        self.to_use___key_pressed__label = True
+        self.key_pressed__label = '5'
+
+    def create_shape_6(self):
+        assert self.beginner()
+        self.canvas.set_editing(False)
+        self.actions.create.setEnabled(False)
+        self.to_use___key_pressed__label = True
+        self.key_pressed__label = '6'
+
+    def create_shape_7(self):
+        assert self.beginner()
+        self.canvas.set_editing(False)
+        self.actions.create.setEnabled(False)
+        self.to_use___key_pressed__label = True
+        self.key_pressed__label = '7'
+
+    def create_shape_8(self):
+        assert self.beginner()
+        self.canvas.set_editing(False)
+        self.actions.create.setEnabled(False)
+        self.to_use___key_pressed__label = True
+        self.key_pressed__label = '8'
+
+    def create_shape_9(self):
+        assert self.beginner()
+        self.canvas.set_editing(False)
+        self.actions.create.setEnabled(False)
+        self.to_use___key_pressed__label = True
+        self.key_pressed__label = '9'
+    # ===============================
 
     def toggle_drawing_sensitive(self, drawing=True):
         """In the middle of drawing, toggling between modes should be disabled."""
@@ -687,11 +879,26 @@ class MainWindow(QMainWindow, WindowMixin):
     def toggle_draw_mode(self, edit=True):
         self.canvas.set_editing(edit)
         self.actions.createMode.setEnabled(edit)
+        # laptq--add ====================
+        self.actions.createMode_0.setEnabled(edit)
+        self.actions.createMode_1.setEnabled(edit)
+        self.actions.createMode_2.setEnabled(edit)
+        self.actions.createMode_3.setEnabled(edit)
+        self.actions.createMode_4.setEnabled(edit)
+        self.actions.createMode_5.setEnabled(edit)
+        self.actions.createMode_6.setEnabled(edit)
+        self.actions.createMode_7.setEnabled(edit)
+        self.actions.createMode_8.setEnabled(edit)
+        self.actions.createMode_9.setEnabled(edit)
+        # ===============================
         self.actions.editMode.setEnabled(not edit)
 
     def set_create_mode(self):
         assert self.advanced()
         self.toggle_draw_mode(False)
+        # lapqt--add ====================
+        self.to_use___key_pressed__label = False
+        # ===============================
 
     def set_edit_mode(self):
         assert self.advanced()
@@ -925,7 +1132,23 @@ class MainWindow(QMainWindow, WindowMixin):
 
         position MUST be in global coordinates.
         """
-        if not self.use_default_label_checkbox.isChecked() or not self.default_label_text_line.text():
+        # laptq--alter ====================
+        # if not self.use_default_label_checkbox.isChecked() or not self.default_label_text_line.text():
+        #     if len(self.label_hist) > 0:
+        #         self.label_dialog = LabelDialog(
+        #             parent=self, list_item=self.label_hist)
+
+        #     # Sync single class mode from PR#106
+        #     if self.single_class_mode.isChecked() and self.lastLabel:
+        #         text = self.lastLabel
+        #     else:
+        #         text = self.label_dialog.pop_up(text=self.prev_label_text)
+        #         self.lastLabel = text
+        # else:
+        #     text = self.default_label_text_line.text()
+        if self.to_use___key_pressed__label:
+            text = self.key_pressed__label
+        elif not self.use_default_label_checkbox.isChecked() or not self.default_label_text_line.text():
             if len(self.label_hist) > 0:
                 self.label_dialog = LabelDialog(
                     parent=self, list_item=self.label_hist)
@@ -938,6 +1161,7 @@ class MainWindow(QMainWindow, WindowMixin):
                 self.lastLabel = text
         else:
             text = self.default_label_text_line.text()
+        # ===============================
 
         # Add Chris
         self.diffc_button.setChecked(False)
